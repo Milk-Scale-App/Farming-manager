@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farming Manager - कृषि प्रबंधक</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header with Logo -->
+        <header class="app-header">
+            <div class="logo-container">
+                <div class="logo-icon">
+                    <i class="fas fa-tractor"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>Farming Manager</h1>
+                    <p>कृषि प्रबंधक और नोट्स</p>
+                </div>
+            </div>
+            <div class="app-info">
+                <p><i class="fas fa-user-circle"></i> किसान: अनुपम</p>
+                <p><i class="fas fa-calendar-alt"></i> तारीख: <span id="currentDate"></span></p>
+            </div>
+        </header>
+
+        <!-- Main App Container with Two Sections -->
+        <main class="main-content">
+            <!-- Left Section: Farming Manager -->
+            <div class="left-section">
+                <!-- Price Input Section -->
+                <section class="card price-card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-rupee-sign"></i> मूल्य सेटिंग</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="price-controls">
+                            <div class="price-input-group">
+                                <label for="priceInput"><i class="fas fa-tag"></i> प्रति यूनिट मूल्य (₹):</label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-rupee-sign"></i>
+                                    <input type="number" id="priceInput" placeholder="0.00" min="0" step="0.01" value="100">
+                                </div>
+                            </div>
+                            <div class="currency-display">
+                                <p>कुल गणना: <span id="priceDisplay">₹100.00</span> प्रति यूनिट के आधार पर</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Data Table Section -->
+                <section class="card table-card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-table"></i> मापन डेटा</h2>
+                        <div class="header-actions">
+                            <button class="btn-icon" id="exportBtn" title="डेटा निर्यात करें">
+                                <i class="fas fa-download"></i>
+                            </button>
+                            <button class="btn-icon" id="printBtn" title="प्रिंट करें">
+                                <i class="fas fa-print"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th width="50">क्र.</th>
+                                        <th width="150">माप (बीघा)</th>
+                                        <th width="120">चयन (1-5)</th>
+                                        <th width="150">उपकरण प्रकार</th>
+                                        <th width="180">परिणाम (₹)</th>
+                                        <th width="80">क्रिया</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tableBody">
+                                    <!-- Rows will be added by JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Action Buttons -->
+                <section class="action-buttons">
+                    <button class="btn btn-primary" id="addRowBtn">
+                        <i class="fas fa-plus-circle"></i> नई पंक्ति जोड़ें
+                    </button>
+                    <button class="btn btn-success" id="calculateBtn">
+                        <i class="fas fa-calculator"></i> गणना करें
+                    </button>
+                    <button class="btn btn-warning" id="clearBtn">
+                        <i class="fas fa-eraser"></i> साफ करें
+                    </button>
+                    <button class="btn btn-danger" id="resetBtn">
+                        <i class="fas fa-redo"></i> रीसेट करें
+                    </button>
+                </section>
+
+                <!-- Summary Section -->
+                <section class="summary-section">
+                    <div class="summary-card">
+                        <div class="summary-header">
+                            <h3><i class="fas fa-chart-pie"></i> कुल योग</h3>
+                        </div>
+                        <div class="summary-grid">
+                            <div class="summary-item">
+                                <div class="summary-icon">
+                                    <i class="fas fa-ruler-combined"></i>
+                                </div>
+                                <div class="summary-info">
+                                    <p class="summary-label">कुल माप</p>
+                                    <p class="summary-value" id="totalMeasurement">0.00 बीघा</p>
+                                </div>
+                            </div>
+                            <div class="summary-item">
+                                <div class="summary-icon">
+                                    <i class="fas fa-list-ol"></i>
+                                </div>
+                                <div class="summary-info">
+                                    <p class="summary-label">कुल चयन</p>
+                                    <p class="summary-value" id="totalSelection">0</p>
+                                </div>
+                            </div>
+                            <div class="summary-item">
+                                <div class="summary-icon">
+                                    <i class="fas fa-calculator"></i>
+                                </div>
+                                <div class="summary-info">
+                                    <p class="summary-label">कुल राशि</p>
+                                    <p class="summary-value" id="totalResult">₹0.00</p>
+                                </div>
+                            </div>
+                            <div class="summary-item">
+                                <div class="summary-icon">
+                                    <i class="fas fa-layer-group"></i>
+                                </div>
+                                <div class="summary-info">
+                                    <p class="summary-label">पंक्तियाँ</p>
+                                    <p class="summary-value" id="totalRows">0</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="summary-card">
+                        <div class="summary-header">
+                            <h3><i class="fas fa-tools"></i> उपकरण विवरण</h3>
+                        </div>
+                        <div class="tool-summary">
+                            <div class="tool-item">
+                                <span class="tool-name">हैरो:</span>
+                                <span class="tool-count" id="harrowCount">0</span>
+                            </div>
+                            <div class="tool-item">
+                                <span class="tool-name">टिलर:</span>
+                                <span class="tool-count" id="tillerCount">0</span>
+                            </div>
+                            <div class="tool-item">
+                                <span class="tool-name">रूटर:</span>
+                                <span class="tool-count" id="routerCount">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Right Section: Farming Notes -->
+            <div class="right-section">
+                <section class="card notes-card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-sticky-note"></i> कृषि नोट्स</h2>
+                        <div class="header-actions">
+                            <button class="btn-icon" id="newNoteBtn" title="नया नोट">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <!-- Notes Editor -->
+                        <div class="note-editor">
+                            <div class="note-header">
+                                <input type="text" id="noteTitle" placeholder="नोट का शीर्षक (उदा: रामू का खेत, जुताई हिसाब)">
+                                <div class="note-actions">
+                                    <button class="btn-icon" id="saveNoteBtn" title="नोट सहेजें">
+                                        <i class="fas fa-save"></i>
+                                    </button>
+                                    <button class="btn-icon" id="clearNoteBtn" title="साफ करें">
+                                        <i class="fas fa-eraser"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="note-meta">
+                                <div class="meta-item">
+                                    <label for="noteFarmer"><i class="fas fa-user"></i> किसान का नाम:</label>
+                                    <input type="text" id="noteFarmer" placeholder="किसान का नाम">
+                                </div>
+                                <div class="meta-item">
+                                    <label for="noteDate"><i class="fas fa-calendar"></i> तारीख:</label>
+                                    <input type="date" id="noteDate">
+                                </div>
+                                <div class="meta-item">
+                                    <label for="noteLandSize"><i class="fas fa-ruler"></i> जमीन (बीघा):</label>
+                                    <input type="number" id="noteLandSize" placeholder="0.00" step="0.01">
+                                </div>
+                                <div class="meta-item">
+                                    <label for="noteTool"><i class="fas fa-tractor"></i> उपकरण:</label>
+                                    <select id="noteTool">
+                                        <option value="हैरो">हैरो</option>
+                                        <option value="टिलर">टिलर</option>
+                                        <option value="रूटर">रूटर</option>
+                                        <option value="अन्य">अन्य</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <textarea id="noteContent" placeholder="यहाँ नोट लिखें... उदाहरण: रामू का खेत, 5 बीघा, हैरो से जुताई, 2 बार चयन, कुल राशि ₹1000..."></textarea>
+                        </div>
+
+                        <!-- Notes List -->
+                        <div class="notes-list-container">
+                            <div class="notes-list-header">
+                                <h3><i class="fas fa-list"></i> सभी नोट्स</h3>
+                                <div class="notes-search">
+                                    <i class="fas fa-search"></i>
+                                    <input type="text" id="notesSearch" placeholder="नोट्स खोजें...">
+                                </div>
+                            </div>
+                            <div class="notes-list" id="notesList">
+                                <!-- Notes will be loaded here -->
+                                <div class="empty-notes">
+                                    <i class="fas fa-clipboard"></i>
+                                    <p>अभी तक कोई नोट नहीं है। नया नोट बनाने के लिए "+" बटन दबाएं।</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <div class="footer-content">
+                <p>© 2023 Farming Manager - कृषि प्रबंधक और नोट्स</p>
+                <p>किसानों की सहायता के लिए डिज़ाइन किया गया</p>
+                <div class="footer-links">
+                    <a href="#"><i class="fas fa-question-circle"></i> मदद</a>
+                    <a href="#"><i class="fas fa-cogs"></i> सेटिंग</a>
+                    <a href="#"><i class="fas fa-envelope"></i> संपर्क</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="script.js"></script>
+</body>
+</html>
